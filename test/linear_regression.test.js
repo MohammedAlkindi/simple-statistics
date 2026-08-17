@@ -1,6 +1,11 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
-import { linearRegression, linearRegressionLine } from "../index.js";
+import {
+    linearRegression,
+    linearRegressionLine,
+    sampleCorrelation,
+    approxEqual
+} from "../index.js";
 
 describe("linear regression", function () {
     it("correctly generates a line for a 0, 0 to 1, 1 dataset", function () {
@@ -38,27 +43,57 @@ describe("linear regression", function () {
                 [0, 0],
                 [1, 0]
             ]),
-            { m: 0, b: 0 }
+            { m: 0, b: 0, r: Number.NaN }
         );
     });
 
     it("a line at 50% grade", function () {
-        assert.deepEqual(
-            linearRegression([
-                [0, 0],
-                [1, 0.5]
-            ]),
-            { m: 0.5, b: 0 }
-        );
+        const { m, b, r } = linearRegression([
+            [0, 0],
+            [1, 0.5]
+        ]);
+        assert.deepEqual({ m, b }, { m: 0.5, b: 0 });
+        assert.ok(approxEqual(r, 1));
     });
 
     it("a line with a high y-intercept", function () {
-        assert.deepEqual(
+        const { m, b, r } = linearRegression([
+            [0, 20],
+            [1, 10]
+        ]);
+        assert.deepEqual({ m, b }, { m: -10, b: 20 });
+        assert.ok(approxEqual(r, -1));
+    });
+});
+
+describe("linear regression correlation", function () {
+    it("returns the Pearson correlation coefficient r", function () {
+        const data = [
+            [1, 2],
+            [2, 2],
+            [3, 3],
+            [4, 4],
+            [5, 5],
+            [6, 60]
+        ];
+        const { r } = linearRegression(data);
+        assert.equal(
+            r.toFixed(4),
+            sampleCorrelation(
+                data.map((d) => d[0]),
+                data.map((d) => d[1])
+            ).toFixed(4)
+        );
+    });
+
+    it("returns r = 1 for a perfect positive fit", function () {
+        assert.equal(
             linearRegression([
-                [0, 20],
-                [1, 10]
-            ]),
-            { m: -10, b: 20 }
+                [0, 0],
+                [1, 1],
+                [2, 2]
+            ]).r,
+            1
         );
     });
 });

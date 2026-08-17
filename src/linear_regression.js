@@ -1,3 +1,5 @@
+import sampleCorrelation from "./sample_correlation.js";
+
 /**
  * [Simple linear regression](http://en.wikipedia.org/wiki/Simple_linear_regression)
  * is a simple way to find a fitted line
@@ -6,13 +8,16 @@
  *
  * @param {Array<Array<number>>} data an array of two-element of arrays,
  * like `[[0, 1], [2, 3]]`
- * @returns {Object} object containing slope and intersect of regression line
+ * @returns {Object} object containing the slope (`m`) and y-intercept (`b`) of
+ * the regression line, plus the Pearson correlation coefficient (`r`) of the
+ * input data. `r` is `NaN` when it is undefined, such as for a single point.
  * @example
- * linearRegression([[0, 0], [1, 1]]); // => { m: 1, b: 0 }
+ * linearRegression([[0, 0], [1, 1]]); // => { m: 1, b: 0, r: 1 }
  */
 function linearRegression(data) {
     let m;
     let b;
+    let r;
 
     // Store data length in a local variable to reduce
     // repeated object property lookups
@@ -23,6 +28,8 @@ function linearRegression(data) {
     if (dataLength === 1) {
         m = 0;
         b = data[0][1];
+        // Correlation is undefined for a single point.
+        r = Number.NaN;
     } else {
         // Initialize our sums and scope the `m` and `b`
         // variables that define the line.
@@ -61,12 +68,26 @@ function linearRegression(data) {
 
         // `b` is the y-intercept of the line.
         b = sumY / dataLength - (m * sumX) / dataLength;
+
+        // `r` is the Pearson correlation coefficient of the input data.
+        // This delegates to `sampleCorrelation` rather than deriving `r`
+        // from the sums above: the sum-of-squares form loses all precision
+        // to catastrophic cancellation when the data has a large offset.
+        r = sampleCorrelation(
+            data.map(function (p) {
+                return p[0];
+            }),
+            data.map(function (p) {
+                return p[1];
+            })
+        );
     }
 
-    // Return both values as an object.
+    // Return all three values as an object.
     return {
         m: m,
-        b: b
+        b: b,
+        r: r
     };
 }
 
