@@ -1,3 +1,5 @@
+import logAverage from "./log_average.js";
+
 /**
  * The [Geometric Mean](https://en.wikipedia.org/wiki/Geometric_mean) is
  * a mean function that is more useful for numbers in different
@@ -39,6 +41,7 @@ function geometricMean(x) {
 
     // the starting value.
     let value = 1;
+    let hasZero = false;
 
     for (let i = 0; i < x.length; i++) {
         // the geometric mean is only valid for positive numbers
@@ -48,8 +51,20 @@ function geometricMean(x) {
             );
         }
 
+        if (x[i] === 0) {
+            hasZero = true;
+        }
+
         // repeatedly multiply the value by each number
         value *= x[i];
+    }
+
+    // The running product leaves double range long before the geometric mean
+    // does: 500 copies of 1e10 overflow to Infinity even though the mean is
+    // 1e10. Only in that case fall back to log space, so every product that
+    // is representable keeps its exact result.
+    if (!hasZero && (value === 0 || !isFinite(value))) {
+        return logAverage(x);
     }
 
     return Math.pow(value, 1 / x.length);

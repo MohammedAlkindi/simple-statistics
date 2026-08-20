@@ -27,4 +27,22 @@ describe("geometric mean", function () {
             assert.fail("geometric mean of array containing zero is not zero");
         }
     });
+
+    it("does not overflow when the running product leaves double range", function () {
+        // The geometric mean of 500 copies of 1e10 is 1e10, but the product
+        // multiplied out is 1e5000.
+        const mean = ss.geometricMean(new Array(500).fill(1e10));
+        assert.ok(Number.isFinite(mean), "expected a finite mean, got " + mean);
+        assert.ok(Math.abs(mean / 1e10 - 1) < 1e-9);
+    });
+
+    it("does not underflow when the running product leaves double range", function () {
+        const mean = ss.geometricMean(new Array(500).fill(1e-10));
+        assert.ok(mean > 0, "expected a positive mean, got " + mean);
+        assert.ok(Math.abs(mean / 1e-10 - 1) < 1e-9);
+    });
+
+    it("keeps the exact result when the product stays in range", function () {
+        assert.equal(ss.geometricMean([1, 2, 3, 4, 5]), 2.605171084697352);
+    });
 });
