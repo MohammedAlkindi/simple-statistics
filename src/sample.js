@@ -22,7 +22,7 @@ function sample(x, n, randomSource) {
     const shuffled = shuffle(x, randomSource);
 
     // and then return a subset of it - the first `n` elements.
-    return shuffled.slice(0, n);
+    return shuffled.slice(0, Math.max(0, n));
 }
 
 export default sample;

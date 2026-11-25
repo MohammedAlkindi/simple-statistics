@@ -32,4 +32,21 @@ it("sample", function () {
         ["foo"],
         "non-number contents"
     );
+    assert.deepEqual(ss.sample([1, 2, 3], -1, rng), [], "negative sample size");
+    assert.deepEqual(ss.sample([1, 2, 3], -5, rng), [], "negative sample size");
+});
+
+it("sample with no rng", function () {
+    const input = [1, 2, 3, 4, 5];
+    const sampled = ss.sample(input, 3);
+    assert.equal(sampled.length, 3);
+    for (const val of sampled) {
+        assert.equal(input.includes(val), true);
+    }
+});
+
+it("sample with readonly array", function () {
+    const input = Object.freeze([1, 2, 3, 4, 5]);
+    const sampled = ss.sample(input, 2);
+    assert.equal(sampled.length, 2);
 });
