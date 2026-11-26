@@ -50,4 +50,15 @@ describe("quantileSorted", function () {
         assert.ok(Object.is(ss.quantileSorted([-0, 0], 1), 0));
         assert.ok(Object.is(ss.quantileSorted([-0, 0], 0.5), 0));
     });
+    it("throws for out of range or NaN quantiles", function () {
+        assert.throws(function () {
+            ss.quantileSorted([1, 2, 3], -0.1);
+        });
+        assert.throws(function () {
+            ss.quantileSorted([1, 2, 3], 1.1);
+        });
+        assert.throws(function () {
+            ss.quantileSorted([1, 2, 3], NaN);
+        });
+    });
 });

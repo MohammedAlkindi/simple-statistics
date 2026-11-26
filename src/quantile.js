@@ -21,10 +21,22 @@ import quickselect from "./quickselect.js";
  * @example
  * quantile([3, 6, 7, 8, 8, 9, 10, 13, 15, 16, 20], 0.5); // => 9
  */
-function quantile(x, p) {
-    const copy = x.slice();
+function validateQuantileProbability(p) {
+    if (typeof p !== "number" || Number.isNaN(p) || p < 0 || p > 1) {
+        throw new Error("quantiles must be between 0 and 1");
+    }
+}
 
+function quantile(x, p) {
     if (Array.isArray(p)) {
+        if (p.length > 0 && x.length === 0) {
+            throw new Error("quantile requires at least one data point.");
+        }
+        for (let i = 0; i < p.length; i++) {
+            validateQuantileProbability(p[i]);
+        }
+
+        const copy = x.slice();
         // rearrange elements so that each element corresponding to a requested
         // quantile is on a place it would be if the array was fully sorted
         multiQuantileSelect(copy, p);
@@ -36,6 +48,12 @@ function quantile(x, p) {
         }
         return results;
     } else {
+        if (x.length === 0) {
+            throw new Error("quantile requires at least one data point.");
+        }
+        validateQuantileProbability(p);
+
+        const copy = x.slice();
         const idx = quantileIndex(copy.length, p);
         quantileSelect(copy, idx, 0, copy.length - 1);
         return quantileSorted(copy, p);

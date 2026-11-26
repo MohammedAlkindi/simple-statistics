@@ -42,6 +42,15 @@ describe("quantile", function () {
         assert.throws(function () {
             ss.quantile([1, 2, 3], -0.5);
         });
+        assert.throws(function () {
+            ss.quantile([1, 2, 3], NaN);
+        });
+        assert.throws(function () {
+            ss.quantile([1, 2, 3], [0.5, NaN]);
+        });
+        assert.throws(function () {
+            ss.quantile([1, 2, 3], undefined);
+        });
     });
 
     it("max quantile is equal to the max", function () {

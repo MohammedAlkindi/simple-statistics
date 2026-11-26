@@ -64,3 +64,10 @@ it("quickselect leaves values outside a nonzero subrange unchanged", function ()
     assert.ok(arr[1] <= arr[2]);
     assert.ok(arr[3] >= arr[2]);
 });
+
+it("quickselect ignores non-finite k without looping", function () {
+    const arr = [3, 2, 1];
+    quickselect(arr, NaN);
+    quickselect(arr, Infinity);
+    assert.deepEqual(arr, [3, 2, 1]);
+});

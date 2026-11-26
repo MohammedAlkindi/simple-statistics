@@ -19,7 +19,7 @@ function quantileSorted(x, p) {
     const idx = (x.length - 1) * p;
     if (x.length === 0) {
         throw new Error("quantile requires at least one data point.");
-    } else if (p < 0 || p > 1) {
+    } else if (typeof p !== "number" || Number.isNaN(p) || p < 0 || p > 1) {
         throw new Error("quantiles must be between 0 and 1");
     } else if (p === 1) {
         // If p is 1, directly return the last element

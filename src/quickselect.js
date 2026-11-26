@@ -15,6 +15,9 @@
  * // = [39, 28, 28, 33, 21, 12, 22, 50, 53, 56, 59, 65, 90, 77, 95]
  */
 function quickselect(arr, k, left, right) {
+    if (typeof k !== "number" || !Number.isFinite(k)) {
+        return;
+    }
     left = left || 0;
     if (right === undefined || right === null) {
         right = arr.length - 1;
