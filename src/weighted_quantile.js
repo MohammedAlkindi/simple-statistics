@@ -41,7 +41,7 @@ function weightedQuantile(x, weights, p) {
 }
 
 function weightedQuantileSorted(sorted, totalWeight, p) {
-    if (p < 0 || p > 1) {
+    if (typeof p !== "number" || Number.isNaN(p) || p < 0 || p > 1) {
         throw new Error("quantiles must be between 0 and 1");
     }
 

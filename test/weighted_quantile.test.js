@@ -48,5 +48,14 @@ describe("weightedQuantile", function () {
         assert.throws(function () {
             ss.weightedQuantile([1, 2], [1, 1], 1.5);
         });
+        assert.throws(function () {
+            ss.weightedQuantile([1, 2], [1, 1], NaN);
+        });
+        assert.throws(function () {
+            ss.weightedQuantile([1, 2], [1, 1], [0.5, NaN]);
+        });
+        assert.throws(function () {
+            ss.weightedQuantile([1, 2], [1, 1], undefined);
+        });
     });
 });
