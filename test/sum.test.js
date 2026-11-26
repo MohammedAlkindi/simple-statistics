@@ -17,6 +17,20 @@ describe("sum", function () {
         assert.ok(Number.isNaN(ss.sum([1, 2, null])));
         assert.ok(Number.isNaN(ss.sum([1, 2, true])));
     });
+
+    it("handles infinite values without NaN corruption", function () {
+        assert.equal(ss.sum([1, Infinity]), Infinity);
+        assert.equal(ss.sum([Infinity, 1]), Infinity);
+        assert.equal(ss.sum([1, -Infinity]), -Infinity);
+        assert.equal(ss.sum([-Infinity, 1]), -Infinity);
+        assert.equal(ss.sum([Infinity, 1, 2, 3]), Infinity);
+        assert.ok(Number.isNaN(ss.sum([Infinity, -Infinity])));
+        assert.ok(Number.isNaN(ss.sum([Infinity, null])));
+    });
+
+    it("corrects floating-point rounding errors", function () {
+        assert.equal(ss.sum([1e16, 1, -1e16]), 1);
+    });
 });
 
 describe("sumSimple", function () {

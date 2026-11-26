@@ -40,6 +40,17 @@ function sum(x) {
         }
         transition = sum + x[i];
 
+        if (!Number.isFinite(transition)) {
+            sum = transition;
+            for (let j = i + 1; j < x.length; j++) {
+                if (typeof x[j] !== "number") {
+                    return Number.NaN;
+                }
+                sum += x[j];
+            }
+            return sum;
+        }
+
         // Here we need to update the correction in a different fashion
         // if the new absolute value is greater than the absolute sum
         if (Math.abs(sum) >= Math.abs(x[i])) {
