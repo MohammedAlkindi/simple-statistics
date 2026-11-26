@@ -1,6 +1,6 @@
 {
     "name": "simple-statistics",
-    "version": "7.12.0",
+    "version": "8.0.0",
     "description": "Simple Statistics",
     "author": "Tom MacWright <tom@macwright.com> (https://macwright.com/)",
     "repository": {
@@ -15,25 +15,22 @@
         "index.d.ts"
     ],
     "devDependencies": {
-        "@biomejs/biome": "^2.5.8",
-        "@changesets/cli": "^3.0.0",
-        "@rollup/plugin-buble": "^1.0.3",
-        "@rollup/plugin-terser": "^1.0.0",
-        "documentation": "^14.0.3",
+        "@biomejs/biome": "^2.6.3",
+        "@changesets/cli": "^3.0.3",
+        "@rollup/plugin-terser": "^1.0.2",
         "random-js": "^2.1.0",
-        "rollup": "^4.62.4",
+        "rollup": "^4.65.0",
         "typescript": "^7.0.2"
     },
     "scripts": {
-        "release": "sh ./scripts/update_website.sh",
         "test": "npm run lint && node --test --experimental-test-isolation=none test/*.test.js",
         "build": "rollup -c rollup.config.mjs",
+        "build:docs": "node scripts/build_docs_source.js && pnpm --filter docs-site build",
         "prepublishOnly": "rollup -c rollup.config.mjs",
         "changeset:version": "changeset version && node ./scripts/update_readme.js",
-        "prelint": "tsc --skipLibCheck --noEmit",
+        "prelint": "tsc --skipLibCheck --noEmit && tsc --noEmit --module nodenext --moduleResolution nodenext",
         "lint": "biome check index.js src test",
-        "lint-fix": "biome check --fix index.js src test",
-        "postlint": "documentation lint src"
+        "lint-fix": "biome check --fix index.js src test"
     },
     "type": "module",
     "source": "index.js",
@@ -64,11 +61,6 @@
         "regression",
         "statistics"
     ],
-    "pnpm": {
-        "onlyBuiltDependencies": [
-            "@biomejs/biome"
-        ]
-    },
     "publishConfig": {
         "access": "public"
     }

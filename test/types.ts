@@ -27,6 +27,7 @@ ss.chiSquaredGoodnessOfFit(data1019, ss.poissonDistribution, 0.05); //= false
 ss.chiSquaredDistributionTable[60][0.99];
 ss.chunk([1, 2, 3, 4, 5, 6], 2);
 ss.ckmeans([-1, 2, -1, 2, 4, 5, 6, -1, 2, -1], 3);
+ss.ckmeansBreaks([-1, 2, -1, 2, 4, 5, 6, -1, 2, -1], 3); // => [-1, 2, 4, 6]
 ss.combinationsReplacement([1, 2], 2); // => [[1, 1], [1, 2], [2, 2]]
 ss.combinations([1, 2, 3], 2); // => [[1,2], [1,3], [2,3]]
 ss.equalIntervalBreaks([1, 2, 3, 4, 5, 6], 4); // => [1, 2.25, 3.5, 4.75, 6]
@@ -88,6 +89,8 @@ var samples = [
 ];
 var regressionLine = ss.linearRegressionLine(ss.linearRegression(samples));
 ss.rSquared(samples, regressionLine); // = 1 this line is a perfect fit
+ss.reservoirSample([1, 2, 3, 4], 2);
+ss.reservoirSample([1, 2, 3, 4], 2, Math.random);
 ss.rootMeanSquare([-1, 1, -1, 1]); // => 1
 ss.sampleCorrelation([1, 2, 3, 4, 5, 6], [2, 2, 3, 4, 5, 60]).toFixed(2);
 ss.sampleCovariance([1, 2, 3, 4, 5, 6], [6, 5, 4, 3, 2, 1]); // => -3.5

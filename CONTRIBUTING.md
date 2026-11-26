@@ -13,7 +13,7 @@ There are a few basic ground-rules for contributors:
 1. **No `--force` pushes** or modifying the Git history in any way.
 1. **Non-master branches** ought to be used for ongoing work.
 1. **External API changes and significant modifications** ought to be subject to an **internal pull-request** to solicit feedback from other contributors.
-1. Internal pull-requests to solicit feedback are *encouraged* for any other non-trivial contribution but left to the discretion of the contributor.
+1. Internal pull-requests to solicit feedback are _encouraged_ for any other non-trivial contribution but left to the discretion of the contributor.
 1. Contributors should attempt to adhere to the prevailing code-style.
 
 ## Releases
@@ -28,7 +28,7 @@ something valuable to add or change.
 
 This contribution policy is based on [The level organization Open Open Source Policy](https://github.com/Level/community/blob/master/CONTRIBUTING.md).
 
------------------------------------------
+---
 
 # Contributing to simple-statistics
 
@@ -41,11 +41,11 @@ In order to achieve this goal, it must be **simple** and **explanatory**.
 `simple-statistics` is written in a subset of JavaScript. Unused features
 include:
 
-* [Conditional Operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator)
-* [ES5 Array methods](http://ie.microsoft.com/TestDrive/HTML5/ECMAScript5Array/Default.html)
-* `with`, `eval`, and other forms of `eval`
-* Most micro-optimizations, like [alternative for loop forms](http://jsperf.com/loops/70)
-* [Shortcut branching](http://javascriptweblog.wordpress.com/2010/07/26/no-more-ifs-alternatives-to-statement-branching-in-javascript/)
+- [Conditional Operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator)
+- [ES5 Array methods](http://ie.microsoft.com/TestDrive/HTML5/ECMAScript5Array/Default.html)
+- `with`, `eval`, and other forms of `eval`
+- Most micro-optimizations, like [alternative for loop forms](http://jsperf.com/loops/70)
+- [Shortcut branching](http://javascriptweblog.wordpress.com/2010/07/26/no-more-ifs-alternatives-to-statement-branching-in-javascript/)
 
 ## Explanatory
 
@@ -68,28 +68,28 @@ Example:
 for instance, while JavaScript supports UTF8 characters like π, they are not used
 in the source:
 
-* UTF8 in JavaScript on pages without specific meta-tag or Content-Type encodings will fail
-* UTF8 can be hard to type, since users need to memorize key combinations or code points
-* Mathematical symbols have meanings that are often better communicated by words:
+- UTF8 in JavaScript on pages without specific meta-tag or Content-Type encodings will fail
+- UTF8 can be hard to type, since users need to memorize key combinations or code points
+- Mathematical symbols have meanings that are often better communicated by words:
   in the form of code, we do not run out of space on the paper, and can afford
   to call a variable `reciprocalSum` instead of `r`.
 
 Every function has a comment that ideally includes:
 
-* The English, long-form name of the method
-* What the method does
-* What purpose the method typically serves
-* A link to a longer description on Wikipedia, Mathematica, or another
+- The English, long-form name of the method
+- What the method does
+- What purpose the method typically serves
+- A link to a longer description on Wikipedia, Mathematica, or another
   web-accessible, non-paywalled source
-* The efficiency of the function in terms of Big-O notation, if appropriate
+- The efficiency of the function in terms of Big-O notation, if appropriate
 
 ## Tests
 
 `simple-statistics` has a testsuite located in `test/`. Each test file
 covers a specific topic and tries to test against known values:
 
-* Values produced by trusted statistics software like R or scipy
-* Common-sense results
+- Values produced by trusted statistics software like R or scipy
+- Common-sense results
 
 Tests can be run in [node.js](http://nodejs.org/) and are run on every commit
 to GitHub by Travis-CI.
@@ -104,10 +104,22 @@ npm test
 ## Documentation
 
 Simple statistics maintains API documentation with [JSDoc](http://usejsdoc.org/) syntax
-and the [documentation.js](https://github.com/documentationjs/documentation) generator.
-Consult the JSDoc and [gettings started docs](https://github.com/documentationjs/documentation/blob/master/docs/GETTING_STARTED.md) for
-hints for how to document each function, or read other documentation comments
-in `src` for inspiration.
+on each function and class in `src`. Read other documentation comments in
+`src` for inspiration on how to document each function.
+
+The published API reference at <https://simple-statistics.github.io/> is
+generated with [TypeDoc](https://typedoc.org/) and [Astro](https://astro.build/) [Starlight](https://starlight.astro.build/),
+and deployed automatically on release (`.github/workflows/docs.yml`).
+To build the docs site locally:
+
+```sh
+pnpm build:docs
+```
+
+This writes the built site to `docs-site/dist`. The hand-written `.d.ts`
+files in `src` are intentionally excluded from this build (see
+`scripts/build_docs_source.js`) — only the JSDoc in the `.js` files is used,
+so there is one place to keep documentation up to date.
 
 ## Code Style
 
@@ -119,9 +131,9 @@ only one difference:
 No aligned `=`, no aligned arguments, spaces are either indents or the 1
 space between expressions. No hard tabs.
 
-* All comparisons should be as strict and obvious as possible: prefer `(foo === 0)` to
+- All comparisons should be as strict and obvious as possible: prefer `(foo === 0)` to
   `(!foo)`.
-* Straightforward code is more important than most optimizations.
+- Straightforward code is more important than most optimizations.
 
 ## Errors
 
@@ -137,8 +149,8 @@ For example:
 
 The following should be true of all errors:
 
-* Errors are not sentences, and they do not end in periods.
-* When referring to numbers, use APA style - words for numbers under 10
+- Errors are not sentences, and they do not end in periods.
+- When referring to numbers, use APA style - words for numbers under 10
 
 ## Benchmarks
 

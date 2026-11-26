@@ -1,5 +1,48 @@
 # Changelog
 
+## 8.0.0
+
+### Major Changes
+
+- d3b45a0: Stop downleveling to ES5 in distributed builds
+  
+  For a long time, simple-statistics has been compiled down to ES5,
+  an ancient version of JavaScript, in order to support very old browsers
+  like Internet Explorer. This cost a tiny bit of performance and size,
+  and it required an additional development dependency.
+  
+  Internet Explorer is nearly extinct - global usage of IE 11 is at 0.21%,
+  and it's time to drop that dependency and the step. So this release
+  does not transpile down. It's very unlikely that this will affect anyone,
+  but if you are still deploying to IE11 users, you'll need to transpile
+  on the application side after this release. The vast majority of users
+  will not need to do anything.
+- 2ed0e96: fix: `quantileRank` and `quantileRankSorted` now throw on empty input instead of returning `NaN`. Every other function in the library rejects empty input with an error, so the `NaN` propagated silently through downstream arithmetic rather than surfacing at the call site. This is breaking for callers that relied on the `NaN` return.
+- 3efbc0b: Fix `minSorted`, `maxSorted` and `extentSorted` silently returning `undefined` (or `[undefined, undefined]`) for empty input, instead of throwing like every other sample-size-sensitive function in the library. `min([])`, `max([])` and `extent([])` already throw `"... requires at least one data point"`, and so do the other sorted-input functions, `modeSorted([])` and `medianSorted([])`; the three fixed here were the only ones that did not. Their `.d.ts` declarations already promised `number` and `[number, number]`, never `undefined`, so the old behavior also contradicted the shipped types. This is breaking for any caller relying on the old `undefined` return.
+
+### Minor Changes
+
+- fb2d9ad: Add `ckmeansBreaks(x, nClasses)`, returning Ckmeans clustering results as class breaks in the same `[min, ...breaks, max]` shape `equalIntervalBreaks` uses, so the two are easy to compare. Requested in #273: `ckmeans` itself returns clusters, which is inconvenient when the caller only wants break positions for choropleth-style classification.
+- b5f6c6c: Add `reservoirSample`, which draws `k` items uniformly at random from an iterable of unknown length in a single pass using O(k) memory. It implements Algorithm L (Li, Kim-Hung, 1994), which skips ahead to the next item that will replace one in the reservoir instead of considering every item.
+
+### Patch Changes
+
+- d9193da: Return zero silhouette values for coincident points in different clusters instead of `NaN`.
+- d287f0b: Refine `inverseErrorFunction` with Newton's method. It returned only the Winitzki approximation, whose round-trip error through `errorFunction` reaches 3.3e-4 against a test tolerance of 4e-4. `probit`, which is built on it, was correspondingly coarse: `probit(0.975)` returned 1.9572 where the standard normal quantile is 1.9600, and the error grew to 1.0e-2 at `probit(0.999)`. Two Newton steps against `errorFunction` bring the round trip to 8.3e-8 and `probit` to within 5.7e-8 of the published quantiles.
+- 1af354f: Fix JSDoc that describes the wrong thing. `chiSquaredGoodnessOfFit` said it returned a number, but it actually returns a boolean. `combinations` and `combinationsReplacement` said they returned permutations, and the replacement version said _without_ replacement. This is not a functional change, just fixing incorrect docstrings.
+- f52890d: Updated min, max and extent to return NaN if the input contains NaN. This also fixes the result changing depending on where the NaN is in the array.
+- f364089: Respect an explicit zero right bound in quickselect so a one-element range does not rearrange the rest of the array.
+
+## 7.12.1
+
+### Patch Changes
+
+- 714d22a: Fix `jenks` putting the same data in different classes when every value is shifted by a constant. `jenksMatrices` accumulated over raw values and computed variance as `sumSquares - (sum * sum) / w`, which cancels away almost all significance at timestamp magnitudes. On 12 consecutive millisecond timestamps `jenks` split 7/3/2 where the same values with the offset removed split 4/4/4. Values are now shifted by the median before accumulating, as `ckmeans` already does.
+- 2c1e374: Add explicit file extensions to declaration imports for TypeScript NodeNext module resolution.
+- a7b0357: Preserve NaN results in scaledRootMeanSquare when the other input values are zero or infinite.
+- d3e92a6: Fix `weightedMean` losing precision that `mean` already corrects for. `mean` computes its sum through the Kahan-Babuska algorithm in `sum.js`, but `weightedMean` accumulated `x[i] * weights[i]` in a plain loop with no compensation, so the two disagreed whenever the weighted values suffered catastrophic cancellation: `mean([1e16, 1, -1e16])` is `0.3333333333333333`, the correct value, while `weightedMean([1e16, 1, -1e16], [1, 1, 1])` returned `0`. `weightedMean` now carries the same correction term through its existing single pass, so equal-weight input matches `mean` exactly, including under cancellation, and no intermediate array is allocated. `weightedVariance` has the same unguarded accumulation and is not addressed here.
+- 48b4edd: Return the single empty combination when choosing zero objects, with or without replacement, including from an empty collection.
+
 ## 7.12.0
 
 ### Minor Changes
@@ -55,7 +98,6 @@
 
   NOTE: this is tagged as a minor change but you should be aware that it does change behavior
   for `binomialDistribution`. For most users this won't be a big deal.
-
   1. Both functions now return `undefined` in cases where they used to return an array of non-finite cells. `binomialDistribution(5, NaN)` returned `[NaN]` and now returns `undefined`. Their TypeScript declarations widen to `number[] | undefined`.
   2. Evaluating cells through logarithms costs a precision where the old product form was exact: `binomialDistribution(2, 0.5)` returns `[0.25000000000000006, 0.5000000000000006, 0.25000000000000006]` rather than `[0.25, 0.5, 0.25]`. This precision loss is small but if you're comparing exact results, it may require updates or rounding.
 
@@ -546,8 +588,8 @@ Before:
 
 ```js
 var l = ss.linear_regression().data([
-  [0, 0],
-  [1, 1],
+    [0, 0],
+    [1, 1]
 ]);
 l.line()(0); // 0
 ```
@@ -556,10 +598,10 @@ After:
 
 ```js
 var line = ss.linearRegressionLine(
-  ss.linearRegression([
-    [0, 0],
-    [1, 1],
-  ])
+    ss.linearRegression([
+        [0, 0],
+        [1, 1]
+    ])
 );
 line(0); // 0
 ```

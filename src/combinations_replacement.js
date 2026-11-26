@@ -5,12 +5,16 @@
  * Unlike permutation, order doesn't matter for combinations.
  *
  * @param {Array} x any type of data
- * @param {int} k the number of objects in each group (without replacement)
- * @returns {Array<Array>} array of permutations
+ * @param {int} k the number of objects in each group (with replacement)
+ * @returns {Array<Array>} array of combinations
  * @example
  * combinationsReplacement([1, 2], 2); // => [[1, 1], [1, 2], [2, 2]]
  */
 function combinationsReplacement(x, k) {
+    if (k === 0) {
+        return [[]];
+    }
+
     const combinationList = [];
 
     for (let i = 0; i < x.length; i++) {
