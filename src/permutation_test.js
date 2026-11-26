@@ -78,20 +78,20 @@ function permutationTest(sampleX, sampleY, alternative, k, randomSource) {
     // more info on permutation test p-value calculations: https://onlinecourses.science.psu.edu/stat464/node/35
     let numExtremeTStats = 0;
     if (alternative === "two_side") {
-        for (let i = 0; i <= k; i++) {
+        for (let i = 0; i < k; i++) {
             if (Math.abs(testStatDsn[i]) >= Math.abs(testStatistic)) {
                 numExtremeTStats += 1;
             }
         }
     } else if (alternative === "greater") {
-        for (let i = 0; i <= k; i++) {
+        for (let i = 0; i < k; i++) {
             if (testStatDsn[i] >= testStatistic) {
                 numExtremeTStats += 1;
             }
         }
     } else {
         // alternative === 'less'
-        for (let i = 0; i <= k; i++) {
+        for (let i = 0; i < k; i++) {
             /* c8 ignore start */
             if (testStatDsn[i] <= testStatistic) {
                 numExtremeTStats += 1;

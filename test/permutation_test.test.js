@@ -65,4 +65,32 @@ describe("permutation test", function () {
         );
         assert.ok(Math.abs(p - 0.25) < 0.05);
     });
+
+    it("does not access out-of-bounds indices in the distribution", function () {
+        // testStatDsn has length k. An off-by-one loop bound (i <= k) accesses
+        // index k which is undefined and can read prototype properties.
+        const normal = ss.permutationTest(
+            [1, 1],
+            [2, 2],
+            "two_side",
+            10,
+            () => 0.5
+        );
+        try {
+            Object.defineProperty(Array.prototype, 10, {
+                value: 999999,
+                configurable: true
+            });
+            const polluted = ss.permutationTest(
+                [1, 1],
+                [2, 2],
+                "two_side",
+                10,
+                () => 0.5
+            );
+            assert.equal(polluted, normal);
+        } finally {
+            delete Array.prototype[10];
+        }
+    });
 });
