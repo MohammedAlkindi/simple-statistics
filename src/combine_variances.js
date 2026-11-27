@@ -14,7 +14,7 @@ import combineMeans from "./combine_means.js";
  * @param {number} variance2 variance of the second list
  * @param {number} mean2 mean of the second list
  * @param {number} n2 number of items in the second list
- * @returns {number} the combined mean
+ * @returns {number} the combined variance
  *
  * @example
  * combineVariances(14 / 3, 5, 3, 8 / 3, 4, 3); // => 47 / 12
@@ -22,10 +22,11 @@ import combineMeans from "./combine_means.js";
 function combineVariances(variance1, mean1, n1, variance2, mean2, n2) {
     const newMean = combineMeans(mean1, n1, mean2, n2);
 
-    return (
-        (n1 * (variance1 + Math.pow(mean1 - newMean, 2)) +
-            n2 * (variance2 + Math.pow(mean2 - newMean, 2))) /
-        (n1 + n2)
+    return combineMeans(
+        variance1 + Math.pow(mean1 - newMean, 2),
+        n1,
+        variance2 + Math.pow(mean2 - newMean, 2),
+        n2
     );
 }
 

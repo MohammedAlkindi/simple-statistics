@@ -32,4 +32,12 @@ describe("combineVariances", function () {
             ss.variance(values1.concat(values2))
         );
     });
+
+    it("does not overflow on large variances or counts", function () {
+        assert.equal(
+            ss.combineVariances(1e308, 1e308, 2, 1e308, 1e308, 2),
+            1e308
+        );
+        assert.equal(ss.combineVariances(2, 5, 1e308, 4, 5, 1e308), 3);
+    });
 });

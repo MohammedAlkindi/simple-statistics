@@ -25,4 +25,10 @@ describe("combineMeans", function () {
             ss.mean(values1.concat(values2))
         );
     });
+
+    it("does not overflow on large means or counts", function () {
+        assert.equal(ss.combineMeans(1e308, 2, 1e308, 2), 1e308);
+        assert.equal(ss.combineMeans(1e308, 2, -1e308, 2), 0);
+        assert.equal(ss.combineMeans(5, 1e308, 10, 1e308), 7.5);
+    });
 });
