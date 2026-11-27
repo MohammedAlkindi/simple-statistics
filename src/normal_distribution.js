@@ -31,15 +31,31 @@ function normalDistribution(x, mean, standardDeviation, cumulative = false) {
         );
     }
 
-    const standardizedX = (x - mean) / standardDeviation;
+    const diff = x - mean;
+    let standardizedX;
+    if (
+        !Number.isFinite(diff) &&
+        Number.isFinite(x) &&
+        Number.isFinite(mean) &&
+        Number.isFinite(standardDeviation)
+    ) {
+        standardizedX = x / standardDeviation - mean / standardDeviation;
+    } else {
+        standardizedX = diff / standardDeviation;
+    }
 
     if (cumulative) {
         return 0.5 * (1 + errorFunction(standardizedX / Math.SQRT2));
     }
-    return (
-        Math.exp(-0.5 * standardizedX * standardizedX) /
-        (standardDeviation * Math.sqrt(2 * Math.PI))
-    );
+    const denominator = standardDeviation * Math.sqrt(2 * Math.PI);
+    if (!Number.isFinite(denominator)) {
+        return (
+            Math.exp(-0.5 * standardizedX * standardizedX) /
+            standardDeviation /
+            Math.sqrt(2 * Math.PI)
+        );
+    }
+    return Math.exp(-0.5 * standardizedX * standardizedX) / denominator;
 }
 
 export default normalDistribution;

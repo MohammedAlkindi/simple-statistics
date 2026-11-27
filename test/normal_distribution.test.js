@@ -137,4 +137,23 @@ describe("normalDistribution", function () {
         assert.throws(() => ss.normalDistribution(42, 40, 0, true));
         assert.throws(() => ss.normalDistribution(42, 40, -1.5, true));
     });
+
+    it("does not overflow on large opposite-sign x and mean", function () {
+        assert.ok(
+            Math.abs(
+                ss.normalDistribution(1e308, -1e308, 1e308, true) -
+                    ss.normalDistribution(2, 0, 1, true)
+            ) < 1e-12
+        );
+        const expectedDensity = ss.normalDistribution(2, 0, 1, false) / 1e308;
+        const actualDensity = ss.normalDistribution(
+            1e308,
+            -1e308,
+            1e308,
+            false
+        );
+        assert.ok(
+            Math.abs(actualDensity - expectedDensity) <= 1e-12 * expectedDensity
+        );
+    });
 });
