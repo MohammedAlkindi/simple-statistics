@@ -98,4 +98,11 @@ describe("silhouette test", function () {
         assert.ok(actual.every((val, i) => ss.approxEqual(val, expected[i])));
         assert.ok(actual.every((val) => !Number.isNaN(val)));
     });
+
+    it("Handles non-contiguous and one-based cluster labels", function () {
+        const points = Object.freeze([[0.2], [0.4], [0.6], [0.8]]);
+        const expected = ss.silhouette(points, [0, 0, 1, 1]);
+        assert.deepEqual(ss.silhouette(points, [1, 1, 2, 2]), expected);
+        assert.deepEqual(ss.silhouette(points, [0, 0, 2, 2]), expected);
+    });
 });

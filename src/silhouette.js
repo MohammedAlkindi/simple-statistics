@@ -105,7 +105,7 @@ function meanDistanceToNearestGroup(which, labels, groupings, distances) {
     const label = labels[which];
     let result = Number.MAX_VALUE;
     for (let i = 0; i < groupings.length; i++) {
-        if (i !== label) {
+        if (i !== label && groupings[i] !== undefined) {
             const d = meanDistanceFromPointToGroup(
                 which,
                 groupings[i],
