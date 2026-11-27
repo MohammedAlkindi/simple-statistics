@@ -30,12 +30,26 @@ function sampleSkewness(x, biased = false) {
     }
 
     const meanValue = mean(x);
+    let maxAbsDeviation = 0;
+    for (let i = 0; i < x.length; i++) {
+        const absDeviation = Math.abs(x[i] - meanValue);
+        if (absDeviation > maxAbsDeviation) {
+            maxAbsDeviation = absDeviation;
+        }
+    }
+
+    if (maxAbsDeviation === 0 || !Number.isFinite(maxAbsDeviation)) {
+        return Number.NaN;
+    }
+
     let tempValue;
     let sumSquaredDeviations = 0;
     let sumCubedDeviations = 0;
 
     for (let i = 0; i < x.length; i++) {
-        tempValue = x[i] - meanValue;
+        // Normalize by the largest deviation so cubing stays in range for
+        // very large or very small magnitudes without changing the ratio.
+        tempValue = (x[i] - meanValue) / maxAbsDeviation;
         sumSquaredDeviations += tempValue * tempValue;
         sumCubedDeviations += tempValue * tempValue * tempValue;
     }

@@ -23,12 +23,26 @@ function sampleKurtosis(x) {
     }
 
     const meanValue = mean(x);
+    let maxAbsDeviation = 0;
+    for (let i = 0; i < n; i++) {
+        const absDeviation = Math.abs(x[i] - meanValue);
+        if (absDeviation > maxAbsDeviation) {
+            maxAbsDeviation = absDeviation;
+        }
+    }
+
+    if (maxAbsDeviation === 0 || !Number.isFinite(maxAbsDeviation)) {
+        return Number.NaN;
+    }
+
     let tempValue;
     let secondCentralMoment = 0;
     let fourthCentralMoment = 0;
 
     for (let i = 0; i < n; i++) {
-        tempValue = x[i] - meanValue;
+        // Normalize by the largest deviation so fourth powers stay in range for
+        // very large or very small magnitudes without changing the ratio.
+        tempValue = (x[i] - meanValue) / maxAbsDeviation;
         secondCentralMoment += tempValue * tempValue;
         fourthCentralMoment += tempValue * tempValue * tempValue * tempValue;
     }

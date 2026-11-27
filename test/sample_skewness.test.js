@@ -81,4 +81,21 @@ describe("sample skewness", function () {
         const data = Object.freeze([2, 4, 6, 3, 1]);
         assert.equal(ss.sampleSkewness(data), ss.sampleSkewness(data, false));
     });
+
+    it("is scale-invariant across extreme magnitudes", function () {
+        const base = [1, 2, 4];
+        const expected = ss.sampleSkewness(base);
+        const expectedBiased = ss.sampleSkewness(base, true);
+        const large = base.map((v) => v * 1e110);
+        const small = base.map((v) => v * 1e-110);
+        assert.ok(Math.abs(ss.sampleSkewness(large) - expected) < 1e-12);
+        assert.ok(Math.abs(ss.sampleSkewness(small) - expected) < 1e-12);
+        assert.ok(
+            Math.abs(ss.sampleSkewness(large, true) - expectedBiased) < 1e-12
+        );
+        assert.ok(
+            Math.abs(ss.sampleSkewness(small, true) - expectedBiased) < 1e-12
+        );
+        assert.ok(Number.isNaN(ss.sampleSkewness([5, 5, 5])));
+    });
 });

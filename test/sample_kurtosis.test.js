@@ -58,4 +58,14 @@ describe("sample kurtosis", function () {
         const data = Object.freeze([8, 1, 6, 1]);
         assert.equal(+ss.sampleKurtosis(data).toPrecision(10), -4.483379501);
     });
+
+    it("is scale-invariant across extreme magnitudes", function () {
+        const base = [1, 2, 3, 5];
+        const expected = ss.sampleKurtosis(base);
+        const large = base.map((v) => v * 1e80);
+        const small = base.map((v) => v * 1e-85);
+        assert.ok(Math.abs(ss.sampleKurtosis(large) - expected) < 1e-12);
+        assert.ok(Math.abs(ss.sampleKurtosis(small) - expected) < 1e-12);
+        assert.ok(Number.isNaN(ss.sampleKurtosis([5, 5, 5, 5])));
+    });
 });
