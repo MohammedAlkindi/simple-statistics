@@ -22,4 +22,15 @@ describe("combinations", function () {
             [2, 3]
         ]);
     });
+    it("throws on negative or non-integer k", function () {
+        assert.throws(function () {
+            ss.combinations([1, 2], -1);
+        });
+        assert.throws(function () {
+            ss.combinations([1, 2], 1.5);
+        });
+        assert.throws(function () {
+            ss.combinations([1, 2], NaN);
+        });
+    });
 });

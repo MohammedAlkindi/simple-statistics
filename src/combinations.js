@@ -10,6 +10,10 @@
  */
 
 function combinations(x, k) {
+    if (!Number.isInteger(k) || k < 0) {
+        throw new Error("k must be a non-negative integer");
+    }
+
     if (k === 0) {
         return [[]];
     }

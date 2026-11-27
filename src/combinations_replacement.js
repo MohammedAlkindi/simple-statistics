@@ -11,6 +11,10 @@
  * combinationsReplacement([1, 2], 2); // => [[1, 1], [1, 2], [2, 2]]
  */
 function combinationsReplacement(x, k) {
+    if (!Number.isInteger(k) || k < 0) {
+        throw new Error("k must be a non-negative integer");
+    }
+
     if (k === 0) {
         return [[]];
     }
