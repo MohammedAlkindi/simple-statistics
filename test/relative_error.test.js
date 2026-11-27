@@ -18,4 +18,9 @@ describe("relative error", function () {
     it("correct handling of double zero", function () {
         assert.equal(ss.relativeError(0, 0), 0);
     });
+
+    it("does not overflow on large opposite-sign values", function () {
+        assert.equal(ss.relativeError(1e308, -1e308), 2);
+        assert.equal(ss.relativeError(-1e308, 1e308), 2);
+    });
 });

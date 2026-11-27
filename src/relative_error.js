@@ -38,7 +38,15 @@ function relativeError(actual, expected) {
         return 0;
     }
     /* c8 ignore end */
-    return Math.abs((actual - expected) / expected);
+    const diff = actual - expected;
+    if (
+        !Number.isFinite(diff) &&
+        Number.isFinite(actual) &&
+        Number.isFinite(expected)
+    ) {
+        return Math.abs(actual / expected - 1);
+    }
+    return Math.abs(diff / expected);
 }
 
 export default relativeError;
