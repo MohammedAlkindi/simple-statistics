@@ -22,12 +22,17 @@ function bisect(func, start, end, maxIterations, errorTolerance) {
         throw new TypeError("func must be a function");
 
     for (let i = 0; i < maxIterations; i++) {
-        const output = (start + end) / 2;
+        let output = (start + end) / 2;
+        if (!Number.isFinite(output)) {
+            output = start / 2 + end / 2;
+        }
 
-        if (
-            func(output) === 0 ||
-            Math.abs((end - start) / 2) < errorTolerance
-        ) {
+        let halfWidth = Math.abs((end - start) / 2);
+        if (!Number.isFinite(halfWidth)) {
+            halfWidth = Math.abs(end / 2 - start / 2);
+        }
+
+        if (func(output) === 0 || halfWidth < errorTolerance) {
             return output;
         }
 

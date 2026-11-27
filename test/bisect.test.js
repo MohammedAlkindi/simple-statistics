@@ -22,4 +22,28 @@ describe("bisect", function () {
             bisect(0);
         });
     });
+
+    it("does not overflow midpoint on large endpoints", function () {
+        const root = bisect(
+            function (x) {
+                return x - 1.2e308;
+            },
+            1e308,
+            1.5e308,
+            100,
+            1e290
+        );
+        assert.ok(Math.abs(root - 1.2e308) < 1e290);
+
+        const symmetricRoot = bisect(
+            function (x) {
+                return x;
+            },
+            -1e308,
+            1e308,
+            100,
+            1
+        );
+        assert.equal(symmetricRoot, 0);
+    });
 });
