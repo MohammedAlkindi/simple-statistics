@@ -2,7 +2,7 @@
  * https://simple-statistics.github.io/docs/#samplewithreplacement
  */
 declare function sampleWithReplacement<T>(
-    x: T[],
+    x: readonly T[],
     n: number,
     randomSource?: () => number
 ): T[];

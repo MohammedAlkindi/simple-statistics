@@ -3,7 +3,7 @@
  */
 declare function chiSquaredGoodnessOfFit(
     data: readonly number[],
-    distributionType: Function,
+    distributionType: (mean: number) => number[] | undefined,
     significance: number
 ): boolean;
 

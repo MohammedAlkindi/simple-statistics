@@ -12,10 +12,12 @@ ss.medianSorted([10, 2, 5, 100, 2, 1]); // => 52.5
 
 var bayes = new ss.BayesianClassifier();
 bayes.train({ species: "Cat" }, "animal");
-bayes.score({ species: "Cat" }); // => { animal: 1 }
+const catOdds: number = bayes.score({ species: "Cat" }).animal; // => { animal: 1 }
+void catOdds;
 bayes.score({ foo: "foo" }); // => { animal: 1 }
 
-ss.bernoulliDistribution(0.3); // => [0.7, 0.3]
+const bernoulliPair: [number, number] = ss.bernoulliDistribution(0.3); // => [0.7, 0.3]
+void bernoulliPair;
 ss.bisect(Math.cos, 0, 4, 100, 0.003); // => 1.572265625
 
 var data1019 = [
@@ -25,6 +27,8 @@ var data1019 = [
 ];
 ss.chiSquaredGoodnessOfFit(data1019, ss.poissonDistribution, 0.05); //= false
 ss.chiSquaredDistributionTable[60][0.99];
+const dynamicDf: number = 60;
+ss.chiSquaredDistributionTable[dynamicDf]?.[0.99];
 ss.chunk([1, 2, 3, 4, 5, 6], 2);
 ss.ckmeans([-1, 2, -1, 2, 4, 5, 6, -1, 2, -1], 3);
 ss.ckmeansBreaks([-1, 2, -1, 2, 4, 5, 6, -1, 2, -1], 3); // => [-1, 2, 4, 6]
@@ -58,6 +62,13 @@ ss.medianAbsoluteDeviation([1, 1, 2, 2, 4, 6, 9]); // => 1
 ss.medianSorted([10, 2, 5, 100, 2, 1]); // => 52.5
 ss.median([10, 2, 5, 100, 2, 1]); // => 3.5
 ss.modeFast(["rabbits", "rabbits", "squirrels"]); // => 'rabbits'
+const roStrings: readonly string[] = ["rabbits", "rabbits", "squirrels"];
+ss.modeFast(roStrings);
+ss.permutationsHeap([1, 2, 3]);
+const roNums: readonly number[] = [1, 2, 3];
+ss.permutationsHeap(roNums);
+ss.sampleWithReplacement(roNums, 2);
+ss.uniqueCountSorted(roNums);
 ss.mode([0, 0, 1]); // => 0
 ss.modeSorted([0, 0, 1]); // => 0
 ss.numericSort([3, 2, 1]); // => [1, 2, 3]

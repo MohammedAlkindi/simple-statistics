@@ -1,6 +1,6 @@
 type Data = object;
 type Item = object;
-type OddsSums = object;
+type OddsSums = Record<string, number>;
 
 /**
  * https://simple-statistics.github.io/docs/#bayesianclassifier

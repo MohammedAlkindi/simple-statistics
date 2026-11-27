@@ -10,6 +10,7 @@ export interface DistributionTable {
     0.025: number;
     0.01: number;
     0.005: number;
+    [significance: number]: number | undefined;
 }
 
 /**
@@ -53,6 +54,7 @@ declare const chiSquaredDistributionTable: {
     80: DistributionTable;
     90: DistributionTable;
     100: DistributionTable;
+    [degreesOfFreedom: number]: DistributionTable | undefined;
 };
 
 export default chiSquaredDistributionTable;
