@@ -1,3 +1,4 @@
+import createSortedNormalizer from "./create_sorted_normalizer.js";
 import makeMatrix from "./make_matrix.js";
 import numericSort from "./numeric_sort.js";
 import uniqueCountSorted from "./unique_count_sorted.js";
@@ -138,8 +139,8 @@ function fillMatrixColumn(
 function fillMatrices(data, matrix, backtrackMatrix) {
     const nValues = matrix[0].length;
 
-    // Shift values by the median to improve numeric stability
-    const shift = data[Math.floor(nValues / 2)];
+    // Shift and scale values to improve numeric stability across magnitudes
+    const normalize = createSortedNormalizer(data, nValues);
 
     // Cumulative sum and cumulative sum of squares for all values in data array
     const sums = [];
@@ -147,7 +148,7 @@ function fillMatrices(data, matrix, backtrackMatrix) {
 
     // Initialize first column in matrix & backtrackMatrix
     for (let i = 0, shiftedValue; i < nValues; ++i) {
-        shiftedValue = data[i] - shift;
+        shiftedValue = normalize(data[i]);
         if (i === 0) {
             sums.push(shiftedValue);
             sumsOfSquares.push(shiftedValue * shiftedValue);

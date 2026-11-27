@@ -38,4 +38,22 @@ describe("jenks", function () {
             })
         );
     });
+    it("handles extreme magnitudes without overflow or underflow", function () {
+        assert.deepEqual(
+            jenks([1e160, 2e160, 1e161, 2e161], 2),
+            [1e160, 2e161, 2e161]
+        );
+        assert.deepEqual(
+            jenks([1e-170, 2e-170, 1e-169, 2e-169], 2),
+            [1e-170, 2e-169, 2e-169]
+        );
+        assert.deepEqual(
+            jenks([-1e308, -1e308, 1e308, 1e308], 2),
+            [-1e308, 1e308, 1e308]
+        );
+        assert.deepEqual(
+            jenks([-2e307, -1e307, 1e308, 1.5e308], 2),
+            [-2e307, 1e308, 1.5e308]
+        );
+    });
 });

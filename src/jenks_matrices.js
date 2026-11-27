@@ -1,3 +1,5 @@
+import createSortedNormalizer from "./create_sorted_normalizer.js";
+
 /*
  * Compute Matrices for Jenks
  *
@@ -45,8 +47,8 @@ function jenksMatrices(data, nClasses) {
         }
     }
 
-    // Shift values by the median to improve numeric stability
-    const shift = data[Math.floor(data.length / 2)];
+    // Shift and scale values to improve numeric stability across magnitudes
+    const normalize = createSortedNormalizer(data, data.length);
 
     for (let l = 2; l < data.length + 1; l++) {
         // `SZ` originally. this is the sum of the values seen thus
@@ -66,7 +68,7 @@ function jenksMatrices(data, nClasses) {
         for (let m = 1; m < l + 1; m++) {
             // `III` originally
             const lowerClassLimit = l - m + 1;
-            const val = data[lowerClassLimit - 1] - shift;
+            const val = normalize(data[lowerClassLimit - 1]);
 
             // here we're estimating variance for each potential classing
             // of the data, for each potential number of classes. `w`
