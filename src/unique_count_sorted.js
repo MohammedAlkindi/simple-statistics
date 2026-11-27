@@ -16,7 +16,11 @@ function uniqueCountSorted(x) {
     let uniqueValueCount = 0;
     let lastSeenValue;
     for (let i = 0; i < x.length; i++) {
-        if (i === 0 || x[i] !== lastSeenValue) {
+        if (
+            i === 0 ||
+            (x[i] !== lastSeenValue &&
+                !(Number.isNaN(x[i]) && Number.isNaN(lastSeenValue)))
+        ) {
             lastSeenValue = x[i];
             uniqueValueCount++;
         }

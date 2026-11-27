@@ -10,4 +10,8 @@ it("uniqueCountSorted", function () {
     assert.equal(uniqueCountSorted([1, 2, 3, 3, 4]), 4);
     assert.equal(uniqueCountSorted([1, 2, 3, 3, 4, 4]), 4);
     assert.equal(uniqueCountSorted([1, 1, 2, 3, 3, 4, 4]), 4);
+    assert.equal(uniqueCountSorted([NaN, NaN, NaN]), 1);
+    assert.equal(uniqueCountSorted([1, NaN, NaN, 2]), 3);
+    assert.equal(uniqueCountSorted([-0, 0]), 1);
+    assert.equal(uniqueCountSorted([undefined, undefined]), 1);
 });
